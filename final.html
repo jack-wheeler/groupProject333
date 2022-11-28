@@ -1,234 +1,393 @@
 <!DOCTYPE html>
 <meta charset="utf-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
-<title>d3-simple-slider</title>
+<meta
+  name="viewport"
+  content="width=device-width, initial-scale=1, shrink-to-fit=no"
+/>
+<title>Steph Curry and the History of 3 Pointers</title>
 
 <script src="https://d3js.org/d3.v7.min.js"></script>
 <script src="https://unpkg.com/d3-simple-slider"></script>
 
 <style>
-    .current-time-container, .slider, .button-container, .annotations-container, .player-selection {
-        display: flex;
-        justify-content: center;
-    }
+  .current-time-container,
+  .slider,
+  .button-container,
+  .annotations-container,
+  .player-selection {
+    display: flex;
+    justify-content: center;
+  }
 
-    .player-cards {
-        display: flex;
-        flex-direction: row;
-    }
+  .player-cards {
+    display: flex;
+    flex-direction: row;
+  }
 
-    .player-selection-img {
-        width: 200px;
-        height: auto;
-    }
+  .player-selection-img {
+    width: 200px;
+    height: auto;
+  }
 
-    .player-info {
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-    }
-
+  .player-info {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
 </style>
 
 <body>
-    <div class="slider-outer-container">
-        <div class="slider-inner-container">
-            <div class="current-time-container">
-                <p id="current-time"></p>
-            </div>
-            <div class="slider">
-                <div id="slider-time"></div>
-            </div>
-        </div>
+  <div class="slider-outer-container">
+    <div class="slider-inner-container">
+      <div class="current-time-container">
+        <p id="current-time"></p>
+      </div>
+      <div class="slider">
+        <div id="slider-time"></div>
+      </div>
     </div>
+  </div>
 
-    <div class="button-container">
-        <button id="continue-button" disabled> Continue Animation </button>
-    </div>
-    
-    <div class="annotations-container">
-        <p class="current-annotation"> Here is some data for each year since 1996. </p>
-    </div>
+  <div class="button-container">
+    <button id="continue-button" disabled>Continue Animation</button>
+  </div>
 
-    <div class="player-selection">
-        <div class="player-cards">
-            <div class="player-container">
-                <div class="player-0-info player-info"></div>
-            </div>
-            
-            <div class="player-container">
-                <div class="player-1-info player-info"></div>
-                <select id="player-selector-1" class="dropdown"></select><br>
-            </div>
-            
-            <div class="player-container player-2">
-                <div class="player-2-info player-info"></div>
-                <select id="player-selector-2" class="dropdown"></select><br>
-            </div>
-            
-            <div class="player-container player-3">
-                <div class="player-3-info player-info"></div>
-                <select id="player-selector-3" class="dropdown"></select><br>
-            </div>
-            
-            <div class="player-container player-4">
-                <div class="player-4-info player-info"></div>
-                <select id="player-selector-4" class="dropdown"></select><br>
-            </div>
-        </div>
-        <select id="stat-selector" class="dropdown"></select><br>
+  <div class="annotations-container">
+    <p class="current-annotation">
+      Here is some data for each year since 1996.
+    </p>
+  </div>
+
+  <div class="player-selection">
+    <div class="player-cards">
+      <div class="player-container">
+        <div class="player-0-info player-info"></div>
+      </div>
+
+      <div class="player-container">
+        <div class="player-1-info player-info"></div>
+        <select id="player-selector-1" class="dropdown"></select
+        ><br />
+      </div>
+
+      <div class="player-container player-2">
+        <div class="player-2-info player-info"></div>
+        <select id="player-selector-2" class="dropdown"></select
+        ><br />
+      </div>
+
+      <div class="player-container player-3">
+        <div class="player-3-info player-info"></div>
+        <select id="player-selector-3" class="dropdown"></select
+        ><br />
+      </div>
+
+      <div class="player-container player-4">
+        <div class="player-4-info player-info"></div>
+        <select id="player-selector-4" class="dropdown"></select
+        ><br />
+      </div>
     </div>
+    <select id="stat-selector" class="dropdown"></select
+    ><br />
+  </div>
+  <svg id="histogram"></svg>
 </body>
 
-
 <script>
-    // Global time variable to use for all visualizations.
-    let globalTime;
+  // Global time variable to use for all visualizations.
+  let globalTime = 1996;
 
-    // Time Slider (starter code from: https://bl.ocks.org/johnwalley/e1d256b81e51da68f7feb632a53c3518).
-    var dataTime = d3.range(0, 25).map(function (d) {
-        return 1996 + d;
+  // Time Slider (starter code from: https://bl.ocks.org/johnwalley/e1d256b81e51da68f7feb632a53c3518).
+  var dataTime = d3.range(0, 25).map(function (d) {
+    return 1996 + d;
+  });
+
+  var sliderTime = d3
+    .sliderBottom()
+    .min(d3.min(dataTime))
+    .max(d3.max(dataTime))
+    .step(1)
+    .width(950)
+    .tickFormat(d3.format("d"))
+    .tickValues(dataTime)
+    .default(1996)
+    .fill("#2196f3")
+    .on("onchange", (val) => {
+      globalTime = val;
+      drawHistogram();
+      d3.select("p#current-time").text(val);
     });
 
-    var sliderTime = d3
-        .sliderBottom()
-        .min(d3.min(dataTime))
-        .max(d3.max(dataTime))
-        .step(1)
-        .width(950)
-        .tickFormat(d3.format("d"))
-        .tickValues(dataTime)
-        .default(1996)
-        .fill('#2196f3')
-        .on('onchange', val => {
-            globalTime = val;
-            d3.select('p#current-time').text(val);
-        });
+  var gTime = d3
+    .select("div#slider-time")
+    .append("svg")
+    .attr("width", 1000)
+    .attr("height", 100)
+    .attr("display", "flex")
+    .attr("justify-content", "center")
+    .append("g")
+    .attr("transform", "translate(30,30)");
 
-    var gTime = d3
-        .select('div#slider-time')
-        .append('svg')
-        .attr('width', 1000)
-        .attr('height', 100)
-        .attr('display', 'flex')
-        .attr('justify-content', 'center')
-        .append('g')
-        .attr('transform', 'translate(30,30)');
+  gTime.call(sliderTime);
 
-    gTime.call(sliderTime);
+  // Create an animation for the slider.
+  var firstSliderAnimation = setInterval(() => {
+    let currentTime = sliderTime.value();
 
-    // Create an animation for the slider.
-    var firstSliderAnimation = setInterval(() => {
-        let currentTime = sliderTime.value()
+    if (currentTime == 2009) {
+      d3.select("#continue-button").attr("disabled", null);
+      clearInterval(firstSliderAnimation);
+      d3.select(".current-annotation").html(
+        "In 2009, Steph Curry changed everything."
+      );
+    } else {
+      sliderTime.value(currentTime + 1);
+      gTime.transition().duration(200).call(sliderTime);
+    }
+  }, 500);
 
-        if (currentTime == 2009) {
-            d3.select('#continue-button').attr('disabled', null);
-            clearInterval(firstSliderAnimation)
-            d3.select('.current-annotation').html('In 2009, Steph Curry changed everything.')
-        }
-        else {
-            sliderTime.value(currentTime + 1);
-            gTime
-                .transition()
-                .duration(200)
-                .call(sliderTime);
-        }
+  d3.select("p#current-time").text(sliderTime.value());
+  d3.select("#continue-button").on("click", (event, d) => {
+    d3.select("#continue-button").attr("disabled", true);
+    var secondSliderAnimation = setInterval(() => {
+      let currentTime = sliderTime.value();
+
+      if (currentTime == d3.max(dataTime)) {
+        clearInterval(secondSliderAnimation);
+      } else {
+        sliderTime.value(currentTime + 1);
+        gTime.transition().duration(200).call(sliderTime);
+      }
     }, 500);
+  });
 
-    d3.select('p#current-time').text(sliderTime.value());
-    d3.select('#continue-button').on("click", (event, d) => {
-        d3.select('#continue-button').attr('disabled', true);
-        var secondSliderAnimation = setInterval(() => {
-            let currentTime = sliderTime.value()
+  // Player Selection Visualization
+  const result = d3
+    .csv("player-selection.csv")
+    .then((data) => processStats(data));
 
-            if (currentTime == d3.max(dataTime)) {
-                clearInterval(secondSliderAnimation)
-            }
-            else {
-                sliderTime.value(currentTime + 1);
-                gTime
-                    .transition()
-                    .duration(200)
-                    .call(sliderTime);
-            }
-        }, 500);
-    })
+  let globalPlayerData = {};
+  let availablePlayers;
 
-    // Player Selection Visualization
-    const result = d3.csv('player-selection.csv')
-            .then((data) => processStats(data));
-    
-    let globalPlayerData = {};
-    let availablePlayers;
+  processStats = (data) => {
+    // Create a global player data dictionary indexed by player name.
+    data.forEach((player) => {
+      const key = player["Name"];
+      const stats = { ...player };
+      delete stats["Name"];
+      globalPlayerData[key] = stats;
+    });
+    // console.log("GPD: ", globalPlayerData);
 
-    processStats = (data) => {
-        // Create a global player data dictionary indexed by player name.
-        data.forEach(player => {
-            const key = player['Name']
-            const stats = {...player}
-            delete stats['Name']
-            globalPlayerData[key] = stats
-        });
-        console.log('GPD: ', globalPlayerData)
-
-        // Render the initial 5 players (Steph and 4 others).
-        for (let i=0; i<5; i++) {
-            renderPlayerCard(i, data[i])
-        }
-
-        // Create a list of available players to select from for dropdowns.
-        availablePlayers = data.slice(5, data.length).map((player) => {
-            return player['Name']
-        });
-        availablePlayers.sort();
-        console.log(availablePlayers);
-
-        initializeDropdowns();
+    // Render the initial 5 players (Steph and 4 others).
+    for (let i = 0; i < 5; i++) {
+      renderPlayerCard(i, data[i]);
     }
 
-    renderPlayerCard = (playerIndex, playerData) => {
-        const leagueKey = 'League ' + statVar
-        d3.select('.player-' + playerIndex.toString() + '-info').html(
-            `
+    // Create a list of available players to select from for dropdowns.
+    availablePlayers = data.slice(5, data.length).map((player) => {
+      return player["Name"];
+    });
+    availablePlayers.sort();
+    // console.log(availablePlayers);
+
+    initializeDropdowns();
+  };
+
+  renderPlayerCard = (playerIndex, playerData) => {
+    const leagueKey = "League " + statVar;
+    d3.select(".player-" + playerIndex.toString() + "-info").html(
+      `
             <img class="player-selection-img" src="steph.png">
-            <p class="player-name"> ${playerData['Name']} </p>
+            <p class="player-name"> ${playerData["Name"]} </p>
             <p class="player-stat"> ${playerData[statVar]} </p>
             <p class="league-average-stat"> ${playerData[leagueKey]} </p>
-            <p class="adjusted-stat"> ${playerData[statVar] / playerData[leagueKey]}</p>
+            <p class="adjusted-stat"> ${
+              playerData[statVar] / playerData[leagueKey]
+            }</p>
             `
-        )
+    );
+  };
+
+  let statVar;
+  let statOptions = ["3P", "3PA", "3P%"];
+  initializeDropdowns = () => {
+    d3.select("#stat-selector")
+      .selectAll("myOptions")
+      .data(statOptions)
+      .enter()
+      .append("option")
+      .text(function (d) {
+        return d;
+      }) // text showed in the menu
+      .attr("value", function (d) {
+        return d;
+      }); // corresponding value returned by the button
+
+    for (let i = 1; i < 5; i++) {
+      const dropdownName = "#player-selector-" + i.toString();
+      d3.select(dropdownName)
+        .selectAll("myOptions")
+        .data(availablePlayers)
+        .enter()
+        .append("option")
+        .text(function (d) {
+          return d;
+        }) // text showed in the menu
+        .attr("value", function (d) {
+          return d;
+        }); // corresponding value returned by the button
     }
+  };
+  statVar = "3P";
 
-    let statVar;
-    let statOptions = ['3P', '3PA', '3P%']
-    initializeDropdowns = () => {
-        d3.select("#stat-selector")
-            .selectAll('myOptions')
-            .data(statOptions)
-            .enter()
-            .append('option')
-            .text(function (d) { return d; }) // text showed in the menu
-            .attr("value", function (d) { return d; }) // corresponding value returned by the button
+  d3.select("#stat-selector").on("change", function (event, d) {
+    // recover the option that has been chosen
+    const selectedOption = d3.select(this).property("value");
+    statVar = selectedOption;
+    // drawBar(centroid.features);
+  });
 
-        for (let i=1; i<5; i++) {
-            const dropdownName = "#player-selector-" + i.toString();
-            d3.select(dropdownName)
-                .selectAll('myOptions')
-                .data(availablePlayers)
-                .enter()
-                .append('option')
-                .text(function (d) { return d; }) // text showed in the menu
-                .attr("value", function (d) { return d; }) // corresponding value returned by the button
-        }
-    }
-    statVar = "3P"
+  //
+  //
+  //
+  //
+  //
+  //
+  //
+  //
+  //
+  //
+  //   Histogram
+  var width = 500;
+  var height = 400;
+  svg = d3
+    .select("#histogram")
+    .attr("width", width)
+    .attr("height", height)
+    .append("g")
+    .attr("transform", "translate(" + 20 + "," + -20 + ")");
 
+  var threePointerStats, champions;
+  d3.csv("Book2.csv").then((data) => {
+    threePointerStats = data;
+    d3.csv("NBA-champions.csv").then((data2) => {
+      champions = data2;
+      data2.forEach((d) => {
+        const key = d["Year"];
+        const stats = { ...d };
+        delete stats["Year"];
+        champions[key] = stats;
+      });
+      console.log(champions);
+      drawHistogram();
+    });
+  });
 
-    d3.select("#stat-selector").on("change", function (event, d) {
-        // recover the option that has been chosen
-        const selectedOption = d3.select(this).property("value")
-        statVar = selectedOption;
-        // drawBar(centroid.features);
-    })
+  function drawHistogram() {
+    // data based on globalTime
+    curData = threePointerStats.filter((d) => {
+      // Pelicans and Hornets sometimes have empty values
+      return (
+        d.Year.includes(String(globalTime)) && d["3PM"].trim().length !== 0
+      );
+    });
+    curData.sort((x, y) => {
+      return d3.ascending(y["3PM"], x["3PM"]);
+    });
+    x = curData.map((d) => d["Team"]);
+    y = curData.map((d) => d["3PM"]);
+    // console.log(x, y);
 
+    // // Scaling functions
+    var x3 = d3.scaleBand().domain(x).range([0, width]).paddingInner(0.1);
+    var y3 = d3.scaleLinear().domain([0, 50]).range([height, 0]);
+
+    svg.selectAll(".axis").remove();
+
+    // // X-axis states
+    // svg
+    //   .append("g")
+    //   .attr("class", "x axis")
+    //   .attr("transform", "translate(0," + height3 + ")")
+    //   .call(d3.axisBottom(x3).ticks(10))
+    //   .selectAll("text")
+    //   .style("text-anchor", "end")
+    //   .attr("dx", "-.8em")
+    //   .attr("dy", ".15em")
+    //   .attr("transform", "rotate(-55)");
+
+    svg
+      .append("text")
+      .attr("class", "x axis label")
+      .attr("transform", "translate(" + width / 2 + " ," + (height + 20) + ")")
+      .style("text-anchor", "middle")
+      .text("Teams");
+
+    // X-axis: Teams
+    svg
+      .append("g")
+      .attr("class", "x axis")
+      .attr("transform", "translate(" + 20 + " ," + -20 + ")")
+      .call(d3.axisBottom(x3));
+
+    // Y-axis: 3P%
+    svg
+      .append("g")
+      .attr("class", "y axis")
+      .attr("transform", "translate(" + 20 + " ," + -20 + ")")
+      .call(d3.axisLeft(y3));
+
+    svg
+      .append("text")
+      .attr("class", "y axis label")
+      .attr("transform", "rotate(-90)")
+      .attr("y", 0 - 20)
+      .attr("x", 0 - height / 2)
+      .attr("dy", "1em")
+      .style("text-anchor", "middle")
+      .text("3 Point Percentage");
+
+    t = d3.transition().duration(200);
+
+    // Visualize bars
+    svg
+      .selectAll("rect.bar")
+      .data(curData)
+      .join(
+        //ENTER (elements to be created)
+        (enter) =>
+          enter
+            .append("rect")
+            .attr("class", "bar")
+            .attr("x", (d) => {
+              return x3(d["Team"]);
+            })
+            .attr("width", x3.bandwidth())
+            .attr("y", y3(0))
+            .attr("fill", "blue")
+            .transition(t)
+            .attr("y", (d) => {
+              //   console.log(d["3PM"]);
+              //   console.log(y3(d["3PM"]));
+              return y3(d["3PM"]);
+            })
+            .attr("height", (d) => height - y3(d["3PM"]))
+            .attr("transform", "translate(" + 20 + " ," + -20 + ")"),
+        // UPDATE (elements to be updated)
+        (update) =>
+          update
+            .attr("fill", (d) => {
+              if (d["Team"] === champions[globalTime]["Champion"]) return "red";
+              else if (d["Team"] === champions[globalTime]["Runner-Up"])
+                return "blue";
+            })
+            .transition(t)
+            .attr("x", (d) => x3(d["Team"]))
+            .attr("width", x3.bandwidth())
+            .attr("y", (d) => y3(d["3PM"]))
+            .attr("height", (d) => height - y3(d["3PM"]))
+      );
+  }
 </script>
