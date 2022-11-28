@@ -1,13 +1,111 @@
 <!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title> Final Visualization </title>
-</head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+<title>d3-simple-slider</title>
+
+<script src="https://d3js.org/d3.v7.min.js"></script>
+<script src="https://unpkg.com/d3-simple-slider"></script>
+
+<style>
+    .current-time-container, .slider, .button-container, .annotations-container {
+        display: flex;
+        justify-content: center;
+    }
+
+</style>
+
 <body>
+    <div class="slider-outer-container">
+        <div class="slider-inner-container">
+            <div class="current-time-container">
+                <p id="current-time"></p>
+            </div>
+            <div class="slider">
+                <div id="slider-time"></div>
+            </div>
+        </div>
+    </div>
+
+    <div class="button-container">
+        <button id="continue-button" disabled> Continue Animation </button>
+    </div>
     
-    
+    <div class="annotations-container">
+        <p class="current-annotation"> Here is some data for each year since 1996. </p>
+    </div>
 </body>
-</html>
+
+
+<script>
+    // Global time variable to use for all visualizations.
+    let globalTime;
+
+    // Time Slider (starter code from: https://bl.ocks.org/johnwalley/e1d256b81e51da68f7feb632a53c3518).
+    var dataTime = d3.range(0, 25).map(function (d) {
+        return 1996 + d;
+    });
+
+    var sliderTime = d3
+        .sliderBottom()
+        .min(d3.min(dataTime))
+        .max(d3.max(dataTime))
+        .step(1)
+        .width(950)
+        .tickFormat(d3.format("d"))
+        .tickValues(dataTime)
+        .default(1996)
+        .fill('#2196f3')
+        .on('onchange', val => {
+            globalTime = val;
+            d3.select('p#current-time').text(val);
+        });
+
+    var gTime = d3
+        .select('div#slider-time')
+        .append('svg')
+        .attr('width', 1000)
+        .attr('height', 100)
+        .attr('display', 'flex')
+        .attr('justify-content', 'center')
+        .append('g')
+        .attr('transform', 'translate(30,30)');
+
+    gTime.call(sliderTime);
+
+    // Create an animation for the slider.
+    var firstSliderAnimation = setInterval(() => {
+        let currentTime = sliderTime.value()
+
+        if (currentTime == 2009) {
+            d3.select('#continue-button').attr('disabled', null);
+            clearInterval(firstSliderAnimation)
+            d3.select('.current-annotation').html('In 2009, Steph Curry changed everything.')
+        }
+        else {
+            sliderTime.value(currentTime + 1);
+            gTime
+                .transition()
+                .duration(200)
+                .call(sliderTime);
+        }
+    }, 500);
+
+    d3.select('p#current-time').text(sliderTime.value());
+    d3.select('#continue-button').on("click", (event, d) => {
+        d3.select('#continue-button').attr('disabled', true);
+        var secondSliderAnimation = setInterval(() => {
+            let currentTime = sliderTime.value()
+
+            if (currentTime == d3.max(dataTime)) {
+                clearInterval(secondSliderAnimation)
+            }
+            else {
+                sliderTime.value(currentTime + 1);
+                gTime
+                    .transition()
+                    .duration(200)
+                    .call(sliderTime);
+            }
+        }, 500);
+    })
+</script>
