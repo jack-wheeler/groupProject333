@@ -70,8 +70,7 @@
         }
 
     .null-container {
-            margin-left: 18px;
-      width: 10vw;
+        width: 9vw;
     }
 
     .player-name,
@@ -101,7 +100,6 @@
     }
 
     .player-selection {
-        border: 1px black solid;
         margin-left: auto;
         width:1250px;
     }
@@ -471,11 +469,6 @@ d3.json("threeAverages.json").then(function(data) {
     } else {
       const imageURL = "player-images/" + playerData["Image URL"];
       d3.select(playerCardSelector + " .player-image-container").html(
-        `
-            );
-        } else {
-            const imageURL = "player-images/" + playerData["Image URL"];
-            d3.select(playerCardSelector + " .player-image-container").html(
                 `
         <img class="player-selection-img" src=${imageURL}>
         `
@@ -778,9 +771,6 @@ d3.json("threeAverages.json").then(function(data) {
     });
     x = curData.map((d) => d["Team"]);
     y = curData.map((d) => d["3P%"]);
-        });
-        x = curData.map((d) => d["Team"]);
-        y = curData.map((d) => d["3P%"]);
 
         // // Scaling functions
         var x3 = d3.scaleBand().domain(x).range([0, width]).paddingInner(0.1);
