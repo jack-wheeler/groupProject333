@@ -2,7 +2,10 @@
 
 <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1, shrink-to-fit=no"
+    />
     <title>d3-simple-slider</title>
 
     <script src="https://d3js.org/d3.v7.min.js"></script>
@@ -10,7 +13,10 @@
 
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link href="https://fonts.googleapis.com/css2?family=Lato:wght@400;700&display=swap" rel="stylesheet" />
+    <link
+        href="https://fonts.googleapis.com/css2?family=Lato:wght@400;700&display=swap"
+        rel="stylesheet"
+    />
 
     <style>
         body,
@@ -88,16 +94,20 @@
         </p>
     </div>
 
-    <div style="display:flex"></div>
-    <div><p id="histogram-title">3-Point Percentage of Each NBA Team</p>
-    <svg id="histogram"></svg></div>
+    <div style="display: flex"></div>
+    <div>
+        <p id="histogram-title">3-Point Percentage of Each NBA Team</p>
+        <svg id="histogram"></svg>
+    </div>
 
-    <div><p id="pie-title">Total Point Breakdown</p>
-    <div style="display:flex">
-        <svg id="pie"></svg>
-        <svg id="legend"></svg>
-        <!-- <svg id="bar"></svg> -->
-    </div></div>
+    <div>
+        <p id="pie-title">Total Point Breakdown</p>
+        <div style="display: flex">
+            <svg id="pie"></svg>
+            <svg id="legend"></svg>
+            <!-- <svg id="bar"></svg> -->
+        </div>
+    </div>
     <div class="slider-outer-container">
         <div class="slider-inner-container">
             <div class="current-time-container">
@@ -123,16 +133,25 @@
         <div class="player-cards">
             <div class="null-container player-null">
                 <div class="null-image-container">
-                    <img class="player-selection-img" src="player-images/empty.png" />
+                    <img
+                        class="player-selection-img"
+                        src="player-images/empty.png"
+                    />
                 </div>
                 <div class="player-name-container">
                     <p class="player-name">&nbsp;</p>
                 </div>
                 <div class="null-info">
-                    <p class="years-played"><strong> Seasons Played </strong></p>
+                    <p class="years-played">
+                        <strong> Seasons Played </strong>
+                    </p>
                     <p class="player-stat"><strong> Career Average </strong></p>
-                    <p class="league-average-stat"><strong> League Average </strong></p>
-                    <p class="adjusted-stat"><strong> Relative to Average </strong></p>
+                    <p class="league-average-stat">
+                        <strong> League Average </strong>
+                    </p>
+                    <p class="adjusted-stat">
+                        <strong> Relative to Average </strong>
+                    </p>
                 </div>
             </div>
 
@@ -141,7 +160,10 @@
             <div class="player-container player-1">
                 <div class="player-image-container"></div>
                 <div class="player-name-container">
-                    <select id="player-selector-1" class="player-selector dropdown"></select>
+                    <select
+                        id="player-selector-1"
+                        class="player-selector dropdown"
+                    ></select>
                 </div>
                 <div class="player-stats-container"></div>
             </div>
@@ -149,7 +171,10 @@
             <div class="player-container player-2">
                 <div class="player-image-container"></div>
                 <div class="player-name-container">
-                    <select id="player-selector-2" class="player-selector dropdown"></select>
+                    <select
+                        id="player-selector-2"
+                        class="player-selector dropdown"
+                    ></select>
                 </div>
                 <div class="player-stats-container"></div>
             </div>
@@ -157,7 +182,10 @@
             <div class="player-container player-3">
                 <div class="player-image-container"></div>
                 <div class="player-name-container">
-                    <select id="player-selector-3" class="player-selector dropdown"></select>
+                    <select
+                        id="player-selector-3"
+                        class="player-selector dropdown"
+                    ></select>
                 </div>
                 <div class="player-stats-container"></div>
             </div>
@@ -165,7 +193,10 @@
             <div class="player-container player-4">
                 <div class="player-image-container"></div>
                 <div class="player-name-container">
-                    <select id="player-selector-4" class="player-selector dropdown"></select>
+                    <select
+                        id="player-selector-4"
+                        class="player-selector dropdown"
+                    ></select>
                 </div>
                 <div class="player-stats-container"></div>
             </div>
@@ -174,8 +205,7 @@
 </body>
 
 <script>
-  let globalTime;
-
+    let globalTime;
 
     // Time Slider (starter code from: https://bl.ocks.org/johnwalley/e1d256b81e51da68f7feb632a53c3518).
     var dataTime = d3.range(0, 24).map(function (d) {
@@ -235,20 +265,18 @@
             let currentTime = sliderTime.value();
 
             if (currentTime == 2014) {
-                d3.select('#continue-button').attr('disabled', null);
-                clearInterval(thirdSliderAnimation)
-                d3.select('.current-annotation').html('In 2015, Stephen Curry wins his first NBA championship, \n shooting 38.5% on 11 3PA/game')
+                d3.select("#continue-button").attr("disabled", null);
+                clearInterval(thirdSliderAnimation);
+                d3.select(".current-annotation").html(
+                    "In 2015, Stephen Curry wins his first NBA championship, \n shooting 38.5% on 11 3PA/game"
+                );
             }
 
             if (currentTime == d3.max(dataTime)) {
-                clearInterval(thirdSliderAnimation)
-            }
-            else {
+                clearInterval(thirdSliderAnimation);
+            } else {
                 sliderTime.value(currentTime + 1);
-                gTime
-                    .transition()
-                    .duration(200)
-                    .call(sliderTime);
+                gTime.transition().duration(200).call(sliderTime);
             }
         }, 500);
     });
@@ -291,7 +319,8 @@
         let playerStat = playerData[statVar];
         let leagueStat = playerData[leagueKey];
         const adjusted =
-            Math.round(100 * (playerData[statVar] / playerData[leagueKey])) / 100;
+            Math.round(100 * (playerData[statVar] / playerData[leagueKey])) /
+            100;
 
         const stephStat = globalPlayerData["Stephen Curry"][statVar];
         const stephLeague = globalPlayerData["Stephen Curry"][leagueKey];
@@ -314,10 +343,12 @@
         <div class="player-name-container">
             <p class="player-name"> Stephen Curry </p>
         </div>
-        <div class="${"player-" + playerIndex.toString() + "-info"
-                } player-info">
-            <p class="years-played"> ${playerData["Start Year"] + "-" + playerData["End Year"]
-                } </p>
+        <div class="${
+            "player-" + playerIndex.toString() + "-info"
+        } player-info">
+            <p class="years-played"> ${
+                playerData["Start Year"] + "-" + playerData["End Year"]
+            } </p>
             <p class="player-stat"> ${playerStat} </p>
             <p class="league-average-stat"> ${leagueStat} </p>
             <p class="adjusted-stat"> ${adjusted}x </p>
@@ -333,15 +364,19 @@
             );
             d3.select(playerCardSelector + " .player-stats-container").html(
                 `
-        <div class="${"player-" + playerIndex.toString() + "-info"
-                } player-info">
-            <p class="years-played"> ${playerData["Start Year"] + "-" + playerData["End Year"]
-                } </p>
-            <p class="player-stat" style=${statBool ? "color:green" : "color:red"
-                }> ${playerStat} </p>
+        <div class="${
+            "player-" + playerIndex.toString() + "-info"
+        } player-info">
+            <p class="years-played"> ${
+                playerData["Start Year"] + "-" + playerData["End Year"]
+            } </p>
+            <p class="player-stat" style=${
+                statBool ? "color:green" : "color:red"
+            }> ${playerStat} </p>
             <p class="league-average-stat"> ${leagueStat} </p>
-            <p class="adjusted-stat" style=${adjustedBool ? "color:green" : "color:red"
-                }> ${adjusted}x</p>
+            <p class="adjusted-stat" style=${
+                adjustedBool ? "color:green" : "color:red"
+            }> ${adjusted}x</p>
         </div>
         `
             );
@@ -391,14 +426,20 @@
                 }); // corresponding value returned by the buttons
 
             // Fill initial player values.
-            d3.select(dropdownId).property("value", Object.keys(globalPlayerData)[i]);
+            d3.select(dropdownId).property(
+                "value",
+                Object.keys(globalPlayerData)[i]
+            );
 
             // Add event listeners for changes.
             d3.select(dropdownId).on("change", function (event, d) {
                 // recover the option that has been chosen
                 const selectedPlayer = d3.select(this).property("value");
                 const selectorIndex = this.id.slice(-1);
-                renderPlayerCard(selectorIndex, globalPlayerData[selectedPlayer]);
+                renderPlayerCard(
+                    selectorIndex,
+                    globalPlayerData[selectedPlayer]
+                );
             });
         }
     };
@@ -411,23 +452,23 @@
         renderAllCards();
     });
 
-
     // 3pt Over Time Visualization
     var width = 450;
     var height = 450;
 
-    pieSvg = d3.select("#pie")
+    pieSvg = d3
+        .select("#pie")
         .attr("width", width)
         .attr("height", height)
         .append("g")
         .attr("transform", "translate(" + 220 + "," + 200 + ")");
 
-    legendSvg = d3.select("#legend")
-        .attr("width",400)
-        .attr("height",200)
+    legendSvg = d3
+        .select("#legend")
+        .attr("width", 400)
+        .attr("height", 200)
         .append("g")
         .attr("transform", "translate(" + -180 + "," + 5 + ")");
-
 
     // barSvg = d3.select("#bar")
     //     .attr("width", width)
@@ -441,18 +482,39 @@
     //     drawBar();
     // })
 
-    var pieData
+    var pieData;
     d3.csv("pie.csv").then((data) => {
-        
-        legendSvg.append("circle").attr("cx", 200).attr("cy", 130).attr("r", 6).style("fill", "red")
-        legendSvg.append("circle").attr("cx", 200).attr("cy", 160).attr("r", 6).style("fill", "blue")
-        legendSvg.append("text").attr("x", 220).attr("y", 130).text("3P").style("font-size", "15px").attr("alignment-baseline", "middle")
-        legendSvg.append("text").attr("x", 220).attr("y", 160).text("2P").style("font-size", "15px").attr("alignment-baseline", "middle")
+        legendSvg
+            .append("circle")
+            .attr("cx", 200)
+            .attr("cy", 130)
+            .attr("r", 6)
+            .style("fill", "red");
+        legendSvg
+            .append("circle")
+            .attr("cx", 200)
+            .attr("cy", 160)
+            .attr("r", 6)
+            .style("fill", "blue");
+        legendSvg
+            .append("text")
+            .attr("x", 220)
+            .attr("y", 130)
+            .text("3P")
+            .style("font-size", "15px")
+            .attr("alignment-baseline", "middle");
+        legendSvg
+            .append("text")
+            .attr("x", 220)
+            .attr("y", 160)
+            .text("2P")
+            .style("font-size", "15px")
+            .attr("alignment-baseline", "middle");
 
         pieData = data;
-        
-        drawPie(data)
-    })
+
+        drawPie(data);
+    });
 
     // function drawBar() {
     //     console.log("Drawing Bar")
@@ -521,10 +583,9 @@
     function drawPie() {
         let currentPieData = pieData.filter((d) => {
             if (globalTime) {
-                return (d.year.includes(String(globalTime)));
-            }
-            else {
-                return (d.year.includes('1996'));
+                return d.year.includes(String(globalTime));
+            } else {
+                return d.year.includes("1996");
             }
         });
 
@@ -533,104 +594,99 @@
         // The radius of the pieplot is half the width or half the height (smallest one). I subtract a bit of margin.
         const radius = Math.min(width, height) / 2 - 40;
         // Create dummy data
-        const data = {"3P": currentPieData[0]['3P'], "2P": currentPieData[0]['2P'] }
+        const data = {
+            "3P": currentPieData[0]["3P"],
+            "2P": currentPieData[0]["2P"],
+        };
 
         // set the color scale
-        const color = d3.scaleOrdinal()
-            .range(["red", "blue"])
+        const color = d3.scaleOrdinal().range(["red", "blue"]);
 
         // Compute the position of each group on the pie:
-        const pie = d3.pie()
-            .value(function (d) { return d[1] })
-        const data_ready = pie(Object.entries(data))
+        const pie = d3.pie().value(function (d) {
+            return d[1];
+        });
+        const data_ready = pie(Object.entries(data));
         // Build the pie chart: Basically, each part of the pie is a path that we build using the arc function.
         pieSvg
-            .selectAll('whatever')
+            .selectAll("whatever")
             .data(data_ready)
             .join(
                 (enter) =>
-                    enter.append("path")
-                        .attr('d', d3.arc()
-                            .innerRadius(0)
-                            .outerRadius(radius)),
+                    enter
+                        .append("path")
+                        .attr("d", d3.arc().innerRadius(0).outerRadius(radius)),
 
                 (update) =>
                     update
                         .append("path")
-                        .attr('d', d3.arc()
-                            .innerRadius(0)
-                            .outerRadius(radius)),
+                        .attr("d", d3.arc().innerRadius(0).outerRadius(radius))
             )
-            .attr('fill', function (d) { return (color(d.data[1])) })
+            .attr("fill", function (d) {
+                return color(d.data[1]);
+            })
             .attr("stroke", "black")
             .style("stroke-width", "2px")
             .style("stroke-opacity", 0)
-            .style("opacity", 0.5)
-
-
+            .style("opacity", 0.5);
     }
-    
-    
-      //
-  //
-  //
-  //
-  //
-  //
-  //
-  //
-  //
-  //
-  //   Histogram
-  var width = 500;
-  var height = 400;
-  svg = d3
-    .select("#histogram")
-    .attr("width", width + 50)
-    .attr("height", height)
-    .append("g")
-    .attr("transform", "translate(" + 20 + "," + -20 + ")");
 
-  var threePointerStats, champions, playoff_teams;
+    //   Histogram
+    var width = 500;
+    var height = 400;
+    svg = d3
+        .select("#histogram")
+        .attr("width", width + 50)
+        .attr("height", height)
+        .append("g")
+        .attr("transform", "translate(" + 20 + "," + -20 + ")");
 
-  async function loadData() {
-    await d3.csv("Book2.csv").then((data) => {
-      threePointerStats = data;
-    });
-    await d3.csv("NBA-champions.csv").then((data2) => {
-      champions = data2;
-      data2.forEach((d) => {
-        const key = d["Year"];
-        const stats = { ...d };
-        // delete stats["Year"];
-        champions[key] = stats;
-      });
-    });
+    var threePointerStats, champions, playoff_teams;
 
-    await d3.csv("nba_playoffs.csv").then((data) => {
-      playoff_teams = data;
-    });
+    async function loadData() {
+        threePointerStats = await d3.csv("Book2.csv");
+        await d3.csv("NBA-champions.csv").then((data2) => {
+            champions = data2;
+            data2.forEach((d) => {
+                const key = d["Year"];
+                const stats = { ...d };
+                // delete stats["Year"];
+                champions[key] = stats;
+            });
+        });
 
-    drawHistogram();
-  }
-  loadData();
+        playoff_teams = await d3.csv("nba_playoffs.csv");
 
-  function drawHistogram() {
-    // data based on globalTime
-    console.log("playoff teams", playoff_teams);
-    curData = threePointerStats.filter((d) => {
-      // Pelicans and Hornets sometimes have empty values
-      return (
-        d.Year.includes(String(globalTime)) && d["3P%"].trim().length !== 0
-      );
-    });
-    curData.sort((x, y) => {
-      return d3.ascending(y["3P%"], x["3P%"]);
+        drawHistogram();
+    }
+    loadData();
+
+    function drawHistogram() {
+        // data based on globalTime
+        curData = threePointerStats.filter((d) => {
+            // Pelicans and Hornets sometimes have empty values
+            return (
+                d.Year.includes(String(globalTime)) &&
+                d["3P%"].trim().length !== 0
+            );
+        });
+        curData.sort((x, y) => {
+            return d3.ascending(y["3P%"], x["3P%"]);
         });
         x = curData.map((d) => d["Team"]);
         y = curData.map((d) => d["3P%"]);
 
-        // // Scaling functions
+        var cur_playoff_teams = new Set();
+        curPlayoffs = playoff_teams.forEach((d) => {
+            if (d.Yr === String(globalTime - 1)) {
+                var win = d.Winner.replace(/\([^()]*\)/g, "").trim();
+                var lose = d.Loser.replace(/\([^()]*\)/g, "").trim();
+                cur_playoff_teams.add(win);
+                cur_playoff_teams.add(lose);
+            }
+        });
+
+        // Scaling functions
         var x3 = d3.scaleBand().domain(x).range([0, width]).paddingInner(0.1);
         var y3 = d3
             .scaleLinear()
@@ -652,22 +708,19 @@
         //   .attr("transform", "rotate(-55)");
 
         // X-axis: Teams
-        svg
-            .append("text")
+        svg.append("text")
             .attr("class", "x axis label")
             .attr("transform", "translate(" + width / 2 + " ," + height + ")")
             .style("text-anchor", "middle")
             .text("Teams");
 
         // Y-axis: 3P%
-        svg
-            .append("g")
+        svg.append("g")
             .attr("class", "y axis")
             .attr("transform", "translate(" + 20 + " ," + 30 + ")")
             .call(d3.axisLeft(y3));
 
-        svg
-            .append("text")
+        svg.append("text")
             .attr("class", "y axis label")
             .attr("transform", "rotate(-90)")
             .attr("y", 0 - 20)
@@ -679,8 +732,7 @@
         t = d3.transition().duration(200);
 
         // Visualize bars
-        svg
-            .selectAll("rect.bar")
+        svg.selectAll("rect.bar")
             .data(curData)
             .join(
                 //ENTER (elements to be created)
@@ -694,22 +746,43 @@
                         .attr("width", x3.bandwidth())
                         .attr("y", y3(0))
                         .attr("fill", (d) => {
-                            if (d["Team"] === champions[globalTime]["Champion"]) return "red";
-                            else if (d["Team"] === champions[globalTime]["Runner-Up"])
+                            if (
+                                d["Team"] ===
+                                champions[globalTime - 1]["Champion"]
+                            )
+                                return "red";
+                            else if (
+                                d["Team"] ===
+                                champions[globalTime - 1]["Runner-Up"]
+                            )
                                 return "orange";
+                            else if (cur_playoff_teams.has(d["Team"]))
+                                return "blue";
                             else return "grey";
                         })
                         .transition(t)
                         .attr("y", (d) => y3(d["3P%"]))
                         .attr("height", (d) => height - y3(d["3P%"]))
-                        .attr("transform", "translate(" + 20 + " ," + -20 + ")"),
+                        .attr(
+                            "transform",
+                            "translate(" + 20 + " ," + -20 + ")"
+                        ),
                 // UPDATE (elements to be updated)
                 (update) =>
                     update
                         .attr("fill", (d) => {
-                            if (d["Team"] === champions[globalTime]["Champion"]) return "red";
-                            else if (d["Team"] === champions[globalTime]["Runner-Up"])
+                            if (
+                                d["Team"] ===
+                                champions[globalTime - 1]["Champion"]
+                            )
+                                return "red";
+                            else if (
+                                d["Team"] ===
+                                champions[globalTime - 1]["Runner-Up"]
+                            )
                                 return "orange";
+                            else if (cur_playoff_teams.has(d["Team"]))
+                                return "blue";
                             else return "grey";
                         })
                         .transition(t)
