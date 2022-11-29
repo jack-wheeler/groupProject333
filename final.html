@@ -135,6 +135,10 @@
     <div>
         <p id="histogram-title">3-Pointers Made by Each NBA Team</p>
         <svg id="histogram"></svg>
+        <div>Champions</div>
+        <img id="histogram-champions" src="" />
+        <div>Runner-Up</div>
+        <img id="histogram-runnerup" src="" />
     </div>
 
     <div>
@@ -838,7 +842,7 @@
 
         var cur_playoff_teams = new Set();
         curPlayoffs = playoff_teams.forEach((d) => {
-            if (d.Yr === String(globalTime - 1)) {
+            if (d.Yr === String(globalTime + 1)) {
                 var win = d.Winner.replace(/\([^()]*\)/g, "").trim();
                 var lose = d.Loser.replace(/\([^()]*\)/g, "").trim();
                 cur_playoff_teams.add(win);
@@ -908,15 +912,23 @@
                         .attr("fill", (d) => {
                             if (
                                 d["Team"] ===
-                                champions[globalTime - 1]["Champion"]
-                            )
+                                champions[globalTime + 1]["Champion"]
+                            ) {
+                                d3.select("#histogram-champions")
+                                    .attr("src", `nba-team-logos/${d.Team}.png`)
+                                    .attr("width", 100)
+                                    .attr("height", 80);
                                 return "red";
-                            else if (
+                            } else if (
                                 d["Team"] ===
-                                champions[globalTime - 1]["Runner-Up"]
-                            )
+                                champions[globalTime + 1]["Runner-Up"]
+                            ) {
+                                d3.select("#histogram-runnerup")
+                                    .attr("src", `nba-team-logos/${d.Team}.png`)
+                                    .attr("width", 100)
+                                    .attr("height", 80);
                                 return "orange";
-                            else if (cur_playoff_teams.has(d["Team"]))
+                            } else if (cur_playoff_teams.has(d["Team"]))
                                 return "blue";
                             else return "grey";
                         })
@@ -931,17 +943,26 @@
                 (update) =>
                     update
                         .attr("fill", (d) => {
+                            console.log(d["Team"]);
                             if (
                                 d["Team"] ===
-                                champions[globalTime - 1]["Champion"]
-                            )
+                                champions[globalTime + 1]["Champion"]
+                            ) {
+                                d3.select("#histogram-champions")
+                                    .attr("src", `nba-team-logos/${d.Team}.png`)
+                                    .attr("width", 100)
+                                    .attr("height", 80);
                                 return "red";
-                            else if (
+                            } else if (
                                 d["Team"] ===
-                                champions[globalTime - 1]["Runner-Up"]
-                            )
+                                champions[globalTime + 1]["Runner-Up"]
+                            ) {
+                                d3.select("#histogram-runnerup")
+                                    .attr("src", `nba-team-logos/${d.Team}.png`)
+                                    .attr("width", 100)
+                                    .attr("height", 80);
                                 return "orange";
-                            else if (cur_playoff_teams.has(d["Team"]))
+                            } else if (cur_playoff_teams.has(d["Team"]))
                                 return "blue";
                             else return "grey";
                         })
