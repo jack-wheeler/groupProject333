@@ -203,7 +203,7 @@
     .fill("#2196f3")
     .on("onchange", (val) => {
       globalTime = val;
-      drawHistogram();
+      // drawHistogram();
       d3.select("#current-time").text(val);
     });
 
@@ -435,10 +435,13 @@
     .append("g")
     .attr("transform", "translate(" + 20 + "," + -20 + ")");
 
-  var threePointerStats, champions;
-  d3.csv("Book2.csv").then((data) => {
-    threePointerStats = data;
-    d3.csv("NBA-champions.csv").then((data2) => {
+  var threePointerStats, champions, playoff_teams;
+
+  async function loadData() {
+    await d3.csv("Book2.csv").then((data) => {
+      threePointerStats = data;
+    });
+    await d3.csv("NBA-champions.csv").then((data2) => {
       champions = data2;
       data2.forEach((d) => {
         const key = d["Year"];
@@ -446,12 +449,19 @@
         // delete stats["Year"];
         champions[key] = stats;
       });
-      drawHistogram();
     });
-  });
+
+    await d3.csv("nba_playoffs.csv").then((data) => {
+      playoff_teams = data;
+    });
+
+    drawHistogram();
+  }
+  loadData();
 
   function drawHistogram() {
     // data based on globalTime
+    console.log("playoff teams", playoff_teams);
     curData = threePointerStats.filter((d) => {
       // Pelicans and Hornets sometimes have empty values
       return (
