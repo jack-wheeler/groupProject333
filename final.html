@@ -88,13 +88,16 @@
         </p>
     </div>
 
-    <p id="histogram-title">3-Point Percentage of Each NBA Team</p>
-    <svg id="histogram"></svg>
+    <div style="display:flex"></div>
+    <div><p id="histogram-title">3-Point Percentage of Each NBA Team</p>
+    <svg id="histogram"></svg></div>
 
+    <div><p id="pie-title">Total Point Breakdown</p>
     <div style="display:flex">
         <svg id="pie"></svg>
+        <svg id="legend"></svg>
         <!-- <svg id="bar"></svg> -->
-    </div>
+    </div></div>
     <div class="slider-outer-container">
         <div class="slider-inner-container">
             <div class="current-time-container">
@@ -418,6 +421,13 @@
         .append("g")
         .attr("transform", "translate(" + 220 + "," + 200 + ")");
 
+    legendSvg = d3.select("#legend")
+        .attr("width",400)
+        .attr("height",200)
+        .append("g")
+        .attr("transform", "translate(" + -180 + "," + 5 + ")");
+
+
     // barSvg = d3.select("#bar")
     //     .attr("width", width)
     //     .attr("height", height)
@@ -432,7 +442,14 @@
 
     var pieData
     d3.csv("pie.csv").then((data) => {
+        
+        legendSvg.append("circle").attr("cx", 200).attr("cy", 130).attr("r", 6).style("fill", "red")
+        legendSvg.append("circle").attr("cx", 200).attr("cy", 160).attr("r", 6).style("fill", "blue")
+        legendSvg.append("text").attr("x", 220).attr("y", 130).text("3P").style("font-size", "15px").attr("alignment-baseline", "middle")
+        legendSvg.append("text").attr("x", 220).attr("y", 160).text("2P").style("font-size", "15px").attr("alignment-baseline", "middle")
+
         pieData = data;
+        
         drawPie(data)
     })
 
