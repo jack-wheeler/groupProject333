@@ -89,6 +89,7 @@
             width: 800px;
             height: 500px;
             margin-left: 280px;
+            
         }
 
         #st-continue-button {
@@ -99,7 +100,7 @@
 
         #st-annotation {
             position: absolute;
-            top: 240px;
+            top: 300px;
             left: 450px;
             width: 250px;
             font-size: 12px;
@@ -113,20 +114,22 @@
 </head>
 
 <body>
-    <div id="line-chart">
-        <div id="st-annotation">
-            Since three pointers were introduced in the NBA in 1980, the average
-            three pointers per game keep gradually increasing.
+    <div class="line-chart-container">
+        <h2 style="text-align:center; margin-bottom: 5vh;"> The Evolution of Player's Three Point Shooting </h2>
+        <div id="line-chart">
+            <div id="st-annotation">
+                Since the three point line was introduced in the NBA in 1980, players
+                have gotten more and more skilled at hitting threes each year.
+            </div>
         </div>
     </div>
+    
 
     <button id="st-continue-button">Next</button>
 
-    <div class="annotations-container">
-        <p class="current-annotation">
-            Here is some data for each year since 1996.
-        </p>
-    </div>
+    <p style="margin-top: 5vh; margin-left:20vw; margin-right: 20vw;"> This increase in 3 pointers is not limited to only a few special players. 
+        All teams have gradually adapted their game in the last few years, with 3 
+        pointers becoming increasingly more important to succeeding in the modern NBA. </p>
 
     <div style="display: flex"></div>
     <div>
@@ -151,6 +154,12 @@
                 <div id="slider-time"></div>
             </div>
         </div>
+    </div>
+
+    <div class="annotations-container">
+        <p class="current-annotation">
+            Here is some data for each year since 1996.
+        </p>
     </div>
 
     <div class="button-container">
@@ -269,8 +278,9 @@
         .append("text")
         .attr("x", -100)
         .attr("y", 200)
-        .attr("font-size", "10px")
-        .html("3pt per game");
+        .attr("font-size", "16px")
+        .attr("transform", "translate(-240, 150)rotate(-90)")
+        .html("3PM Per Game");
 
     var colorSt = d3
         .scaleOrdinal()
@@ -318,21 +328,21 @@
                 drawLine("bird", 2.5);
                 d3.select("#st-annotation")
                     .html(
-                        "Larry Bird was the first to start masterizing the three pointers in the NBA in the 80s. The Celtics legend shooting skills helped him become NBA season MVP of 1983-1984 season."
+                        "Larry Bird was the first to start masterizing three pointers in the NBA in the 80s. The Celtics legend's shooting skills helped him become the NBA MVP of the 1983-1984 season."
                     )
                     .transition()
                     .duration(2000)
-                    .style("top", "220px")
+                    .style("top", "260px")
                     .style("left", "470px");
             } else if (stCount == 1) {
                 drawLine("richmond", 2.5);
                 d3.select("#st-annotation")
                     .html(
-                        "Mitch Richmond was one of the best 3pt shooters of the 90s. He was a six-time NBA All-Star player and his legendary number 2 shirt in the Sacramento Kings was retired."
+                        "Mitch Richmond was one of the best 3pt shooters of the 90s. He was a six-time NBA All-Star player and his legendary number 2 jersey was retired by the Sacramento Kings."
                     )
                     .transition()
                     .duration(2000)
-                    .style("top", "120px")
+                    .style("top", "200px")
                     .style("left", "580px");
             } else if (stCount == 2) {
                 drawLine("allen", 2.5);
@@ -342,18 +352,18 @@
                     )
                     .transition()
                     .duration(2000)
-                    .style("top", "70px")
+                    .style("top", "130px")
                     .style("left", "700px");
             } else {
                 drawLine("curry", 5);
                 d3.select("#st-continue-button").attr("disabled", true);
                 d3.select("#st-annotation")
                     .html(
-                        "However, the guy that makes even the best look like average players is Stephen Curry. <br><br> With the most three-pointers made in a carreer, Stephen is widely considered the greatest three pointer of all-time"
+                        "However, the man that makes even the best look like average players is Stephen Curry. <br><br> With the most three-pointers made of all time, Curry is widely considered the greatest three point shooter of all-time."
                     )
                     .transition()
                     .duration(2000)
-                    .style("top", "30px")
+                    .style("top", "70px")
                     .style("left", "710px");
             }
             stCount++;
@@ -642,7 +652,7 @@
             .style("fill", "red");
         legendSvg
             .append("circle")
-            .attr("cx", 200)
+            .attr("cx", 200) 
             .attr("cy", 160)
             .attr("r", 6)
             .style("fill", "blue");
