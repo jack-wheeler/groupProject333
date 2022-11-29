@@ -93,7 +93,7 @@
 
     <div style="display:flex">
         <svg id="pie"></svg>
-        <svg id="bar"></svg>
+        <!-- <svg id="bar"></svg> -->
     </div>
     <div class="slider-outer-container">
         <div class="slider-inner-container">
@@ -191,7 +191,7 @@
         .on("onchange", (val) => {
             globalTime = val;
             drawPie();
-            drawBar();
+            // drawBar();
             drawHistogram();
             d3.select("#current-time").text(val);
         });
@@ -418,88 +418,96 @@
         .append("g")
         .attr("transform", "translate(" + 220 + "," + 200 + ")");
 
-    barSvg = d3.select("#bar")
-        .attr("width", width)
-        .attr("height", height)
-        .append("g")
-        .attr("transform", "translate(" + 40 + "," + -40 + ")");
+    // barSvg = d3.select("#bar")
+    //     .attr("width", width)
+    //     .attr("height", height)
+    //     .append("g")
+    //     .attr("transform", "translate(" + 40 + "," + -40 + ")");
 
     var threePointBreakdown, yearIndex;
-    d3.csv("3pt-ot.csv").then((data) => {
-        threePointBreakdown = data;
-        drawBar();
-    })
+    // d3.csv("3pt-ot.csv").then((data) => {
+    //     threePointBreakdown = data;
+    //     drawBar();
+    // })
 
     var pieData
     d3.csv("pie.csv").then((data) => {
         pieData = data;
-        drawPie()
+        drawPie(data)
     })
 
-    function drawBar() {
-        t = d3.transition().duration(200);
+    // function drawBar() {
+    //     console.log("Drawing Bar")
+    //     t = d3.transition().duration(200);
 
-        currentData = threePointBreakdown.filter((d) => {
-            return (
-                d.year.includes(String(globalTime))
-            );
-        })
-        var barX = ["3PM", "3PA"]
-        var barY = [currentData[0]["3PM"], currentData[0]["3PA"]]
-        console.log(barY);
-        // draw bar
-        var x = d3.scaleLinear()
-            .domain([0, 35])
-            .range([0, width - 150]);
-        var y = d3.scaleBand()
-            .domain(barX)
-            .range([0, height])
-            .paddingInner(.1);
+    //     currentData = threePointBreakdown.filter((d) => {
+    //         return (
+    //             d.year.includes(String(globalTime))
+    //         );
+    //     })
+    //     var barX = ["3PM", "3PA"]
+    //     var barY = [currentData[0]["3PM"], currentData[0]["3PA"]]
+    //     console.log(barY);
+    //     // draw bar
+    //     var x = d3.scaleLinear()
+    //         .domain([0, 35])
+    //         .range([0, width - 150]);
+    //     var y = d3.scaleBand()
+    //         .domain(barX)
+    //         .range([0, height])
+    //         .paddingInner(.1);
 
-        barSvg.selectAll(".axis").remove();
+    //     barSvg.selectAll(".bar-axis").remove();
 
-        barSvg.append("g")
-            .attr("transform", `translate(0, ${height})`)
-            .call(d3.axisBottom(x))
-            .selectAll("text")
-            .attr("transform", "translate(-10,0)rotate(-45)")
-            .style("text-anchor", "end");
+    //     barSvg.append("g")
+    //         .attr("transform", `translate(0, ${height})`)
+    //         .attr("class", "bar-axis")
+    //         .call(d3.axisBottom(x))
+    //         .selectAll("text")
+    //         .attr("transform", "translate(-10,0)rotate(-45)")
+    //         .style("text-anchor", "end");
 
-        barSvg.append("g")
-            .call(d3.axisLeft(y))
+    //     barSvg.append("g")
+    //         .attr("class", "bar-axis")
+    //         .call(d3.axisLeft(y))
 
-        barSvg.selectAll("rect.bar")
-            .data(currentData)
-            .join(
-                (enter) =>
-                    enter
-                        .append("rect")
-                        .attr("class", "bar")
-                        .attr("y", (d) => y(["3PM", "3PA"]))
-                        .attr("height", y.bandwidth())
-                        .attr("x", x(0))
-                        .attr("fill", (d) => "red")
-                        .transition(t)
-                        .attr("x", (d) => x(d))
-                        .attr("width", (d) => width - x(d))
-                        .attr("transform", "translate(" + 20 + " ," + -20 + ")"),
+    //     barSvg.selectAll("rect.bar")
+    //         .data(currentData)
+    //         .join(
+    //             (enter) =>
+    //                 enter
+    //                     .append("rect")
+    //                     .attr("class", "bar")
+    //                     .attr("y", (d) => y(["3PM", "3PA"]))
+    //                     .attr("height", y.bandwidth())
+    //                     .attr("x", x(0))
+    //                     .attr("fill", (d) => "red")
+    //                     .transition(t)
+    //                     .attr("x", (d) => x(d))
+    //                     .attr("width", (d) => width - x(d))
+    //                     .attr("transform", "translate(" + 20 + " ," + -20 + ")"),
 
-                (update) =>
-                    update
-                        .attr("fill", (d) => "red")
+    //             (update) =>
+    //                 update
+    //                     .attr("fill", (d) => "red")
 
-                        .transition(t)
-                        .attr("y", (d) => y(["3PM", "3PA"]))
-                        .attr("height", y.bandwidth())
-                        .attr("x", (d) => x(d))
-                        .attr("width", (d) => width - y(["3PM", "3PA"]))
+    //                     .transition(t)
+    //                     .attr("y", (d) => y(["3PM", "3PA"]))
+    //                     .attr("height", y.bandwidth())
+    //                     .attr("x", (d) => x(d))
+    //                     .attr("width", (d) => width - y(["3PM", "3PA"]))
 
-            )
-    }
+    //         )
+    // }
 
     function drawPie() {
-        currentData = pieData.filter((d) => {
-            return (d.year.includes(String(globalTime)));
+        let currentPieData = pieData.filter((d) => {
+            if (globalTime) {
+                return (d.year.includes(String(globalTime)));
+            }
+            else {
+                return (d.year.includes('1996'));
+            }
         });
 
         t = d3.transition().duration(200);
@@ -507,7 +515,7 @@
         // The radius of the pieplot is half the width or half the height (smallest one). I subtract a bit of margin.
         const radius = Math.min(width, height) / 2 - 40;
         // Create dummy data
-        const data = { "3P": currentData[0]['3P'], "2P": currentData[0]['2P'] }
+        const data = {"3P": currentPieData[0]['3P'], "2P": currentPieData[0]['2P'] }
 
         // set the color scale
         const color = d3.scaleOrdinal()
@@ -591,7 +599,6 @@
         });
         x = curData.map((d) => d["Team"]);
         y = curData.map((d) => d["3P%"]);
-        console.log(y);
 
         // // Scaling functions
         var x3 = d3.scaleBand().domain(x).range([0, width]).paddingInner(0.1);
