@@ -418,11 +418,11 @@
         var thirdSliderAnimation = setInterval(() => {
             let currentTime = sliderTime.value();
 
-            if (currentTime == 2014) {
+            if (currentTime == 2013) {
                 d3.select("#continue-button").attr("disabled", null);
                 clearInterval(thirdSliderAnimation);
                 d3.select(".current-annotation").html(
-                    "In 2015, Stephen Curry wins his first NBA championship, \n shooting 38.5% on 11 3PA/game"
+                    "In 2014-15, Stephen Curry wins his first NBA championship, \n shooting 38.5% on 11 3PA/game"
                 );
             }
 
