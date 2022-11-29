@@ -1,46 +1,96 @@
 <!DOCTYPE html>
-<meta charset="utf-8" />
-<meta
-  name="viewport"
-  content="width=device-width, initial-scale=1, shrink-to-fit=no"
-/>
-<title>Steph Curry and the History of 3 Pointers</title>
+<head>
+  <meta charset="utf-8" />
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1, shrink-to-fit=no"
+  />
+  <title>d3-simple-slider</title>
 
-<script src="https://d3js.org/d3.v7.min.js"></script>
-<script src="https://unpkg.com/d3-simple-slider"></script>
+  <script src="https://d3js.org/d3.v7.min.js"></script>
+  <script src="https://unpkg.com/d3-simple-slider"></script>
 
-<style>
-  .current-time-container,
-  .slider,
-  .button-container,
-  .annotations-container,
-  .player-selection {
-    display: flex;
-    justify-content: center;
-  }
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Lato:wght@400;700&display=swap"
+    rel="stylesheet"
+  />
 
-  .player-cards {
-    display: flex;
-    flex-direction: row;
-  }
+  <style>
+    body,
+    button,
+    select,
+    text {
+      font-family: "Lato", sans-serif;
+    }
 
-  .player-selection-img {
-    width: 200px;
-    height: auto;
-  }
+    select {
+      font-size: 15px;
+      text-align: center;
+    }
 
-  .player-info {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-  }
-</style>
+    .current-time-container,
+    .slider,
+    .button-container,
+    .annotations-container,
+    .player-selection {
+      display: flex;
+      justify-content: center;
+    }
+
+    .stat-selector-container {
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+    }
+
+    .stat-selector-label {
+      margin-right: 1vw;
+    }
+
+    #stat-selector {
+      height: 30px;
+    }
+
+    .player-cards {
+      display: flex;
+      flex-direction: row;
+    }
+
+    .player-selection-img {
+      height: 300px;
+    }
+
+    .player-container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      width: 14vw;
+      border-right: 1px solid gray;
+    }
+
+    .player-info {
+      text-align: center;
+    }
+
+    .null-container {
+      width: 9vw;
+    }
+
+    .player-name,
+    .player-selector {
+      margin-top: 0;
+      margin-bottom: 0;
+    }
+  </style>
+</head>
 
 <body>
   <div class="slider-outer-container">
     <div class="slider-inner-container">
       <div class="current-time-container">
-        <p id="current-time"></p>
+        <h2 id="current-time"></h2>
       </div>
       <div class="slider">
         <div id="slider-time"></div>
@@ -58,45 +108,83 @@
     </p>
   </div>
 
+  <p id="histogram-title">3-Point Percentage of Each NBA Team</p>
+  <svg id="histogram"></svg>
+
+  <h2 style="text-align: center">Player Comparison</h2>
+  <div class="stat-selector-container">
+    <p class="stat-selector-label">Current Statistic:</p>
+    <select id="stat-selector" class="dropdown"></select>
+  </div>
+
   <div class="player-selection">
     <div class="player-cards">
-      <div class="player-container">
-        <div class="player-0-info player-info"></div>
+      <div class="null-container player-null">
+        <div class="null-image-container">
+          <img class="player-selection-img" src="player-images/empty.png" />
+        </div>
+        <div class="player-name-container">
+          <p class="player-name">&nbsp;</p>
+        </div>
+        <div class="null-info">
+          <p class="years-played"><strong> Seasons Played </strong></p>
+          <p class="player-stat"><strong> Career Average </strong></p>
+          <p class="league-average-stat"><strong> League Average </strong></p>
+          <p class="adjusted-stat"><strong> Relative to Average </strong></p>
+        </div>
       </div>
 
-      <div class="player-container">
-        <div class="player-1-info player-info"></div>
-        <select id="player-selector-1" class="dropdown"></select
-        ><br />
+      <div class="player-container player-0"></div>
+
+      <div class="player-container player-1">
+        <div class="player-image-container"></div>
+        <div class="player-name-container">
+          <select
+            id="player-selector-1"
+            class="player-selector dropdown"
+          ></select>
+        </div>
+        <div class="player-stats-container"></div>
       </div>
 
       <div class="player-container player-2">
-        <div class="player-2-info player-info"></div>
-        <select id="player-selector-2" class="dropdown"></select
-        ><br />
+        <div class="player-image-container"></div>
+        <div class="player-name-container">
+          <select
+            id="player-selector-2"
+            class="player-selector dropdown"
+          ></select>
+        </div>
+        <div class="player-stats-container"></div>
       </div>
 
       <div class="player-container player-3">
-        <div class="player-3-info player-info"></div>
-        <select id="player-selector-3" class="dropdown"></select
-        ><br />
+        <div class="player-image-container"></div>
+        <div class="player-name-container">
+          <select
+            id="player-selector-3"
+            class="player-selector dropdown"
+          ></select>
+        </div>
+        <div class="player-stats-container"></div>
       </div>
 
       <div class="player-container player-4">
-        <div class="player-4-info player-info"></div>
-        <select id="player-selector-4" class="dropdown"></select
-        ><br />
+        <div class="player-image-container"></div>
+        <div class="player-name-container">
+          <select
+            id="player-selector-4"
+            class="player-selector dropdown"
+          ></select>
+        </div>
+        <div class="player-stats-container"></div>
       </div>
     </div>
-    <select id="stat-selector" class="dropdown"></select
-    ><br />
   </div>
-  <svg id="histogram"></svg>
 </body>
 
 <script>
-  // Global time variable to use for all visualizations.
-  let globalTime = 1996;
+  let globalTime;
 
   // Time Slider (starter code from: https://bl.ocks.org/johnwalley/e1d256b81e51da68f7feb632a53c3518).
   var dataTime = d3.range(0, 25).map(function (d) {
@@ -116,7 +204,7 @@
     .on("onchange", (val) => {
       globalTime = val;
       drawHistogram();
-      d3.select("p#current-time").text(val);
+      d3.select("#current-time").text(val);
     });
 
   var gTime = d3
@@ -147,7 +235,7 @@
     }
   }, 500);
 
-  d3.select("p#current-time").text(sliderTime.value());
+  d3.select("#current-time").text(sliderTime.value());
   d3.select("#continue-button").on("click", (event, d) => {
     d3.select("#continue-button").attr("disabled", true);
     var secondSliderAnimation = setInterval(() => {
@@ -168,6 +256,7 @@
     .then((data) => processStats(data));
 
   let globalPlayerData = {};
+  let selectedPlayers = {};
   let availablePlayers;
 
   processStats = (data) => {
@@ -178,7 +267,6 @@
       delete stats["Name"];
       globalPlayerData[key] = stats;
     });
-    // console.log("GPD: ", globalPlayerData);
 
     // Render the initial 5 players (Steph and 4 others).
     for (let i = 0; i < 5; i++) {
@@ -186,28 +274,94 @@
     }
 
     // Create a list of available players to select from for dropdowns.
-    availablePlayers = data.slice(5, data.length).map((player) => {
+    availablePlayers = data.slice(1, data.length).map((player) => {
       return player["Name"];
     });
-    availablePlayers.sort();
-    // console.log(availablePlayers);
 
     initializeDropdowns();
   };
 
   renderPlayerCard = (playerIndex, playerData) => {
+    const playerCardSelector = ".player-" + playerIndex.toString();
     const leagueKey = "League " + statVar;
-    d3.select(".player-" + playerIndex.toString() + "-info").html(
-      `
-            <img class="player-selection-img" src="steph.png">
-            <p class="player-name"> ${playerData["Name"]} </p>
-            <p class="player-stat"> ${playerData[statVar]} </p>
-            <p class="league-average-stat"> ${playerData[leagueKey]} </p>
-            <p class="adjusted-stat"> ${
-              playerData[statVar] / playerData[leagueKey]
-            }</p>
-            `
-    );
+
+    let playerStat = playerData[statVar];
+    let leagueStat = playerData[leagueKey];
+    const adjusted =
+      Math.round(100 * (playerData[statVar] / playerData[leagueKey])) / 100;
+
+    const stephStat = globalPlayerData["Stephen Curry"][statVar];
+    const stephLeague = globalPlayerData["Stephen Curry"][leagueKey];
+    const stephAdjusted = Math.round(100 * (stephStat / stephLeague)) / 100;
+
+    const statBool = playerStat >= stephStat;
+    const adjustedBool = adjusted >= stephAdjusted;
+
+    if (statVar == "3P%") {
+      playerStat = (Math.round(1000 * playerStat) / 10).toString() + "%";
+      leagueStat = (Math.round(1000 * leagueStat) / 10).toString() + "%";
+    }
+
+    if (playerIndex == 0) {
+      d3.select(playerCardSelector).html(
+        `
+        <div class="player-image-container">
+            <img class="player-selection-img" src="player-images/steph.png">
+        </div>
+        <div class="player-name-container">
+            <p class="player-name"> Stephen Curry </p>
+        </div>
+        <div class="${
+          "player-" + playerIndex.toString() + "-info"
+        } player-info">
+            <p class="years-played"> ${
+              playerData["Start Year"] + "-" + playerData["End Year"]
+            } </p>
+            <p class="player-stat"> ${playerStat} </p>
+            <p class="league-average-stat"> ${leagueStat} </p>
+            <p class="adjusted-stat"> ${adjusted}x </p>
+        </div>
+        `
+      );
+    } else {
+      const imageURL = "player-images/" + playerData["Image URL"];
+      console.log(imageURL);
+      d3.select(playerCardSelector + " .player-image-container").html(
+        `
+        <img class="player-selection-img" src=${imageURL}>
+        `
+      );
+      d3.select(playerCardSelector + " .player-stats-container").html(
+        `
+        <div class="${
+          "player-" + playerIndex.toString() + "-info"
+        } player-info">
+            <p class="years-played"> ${
+              playerData["Start Year"] + "-" + playerData["End Year"]
+            } </p>
+            <p class="player-stat" style=${
+              statBool ? "color:green" : "color:red"
+            }> ${playerStat} </p>
+            <p class="league-average-stat"> ${leagueStat} </p>
+            <p class="adjusted-stat" style=${
+              adjustedBool ? "color:green" : "color:red"
+            }> ${adjusted}x</p>
+        </div>
+        `
+      );
+    }
+  };
+
+  renderAllCards = () => {
+    for (let i = 0; i < 5; i++) {
+      if (i == 0) {
+        renderPlayerCard(0, globalPlayerData["Stephen Curry"]);
+      } else {
+        const dropdownId = "#player-selector-" + i.toString();
+        const currentPlayer = d3.select(dropdownId).property("value");
+        renderPlayerCard(i, globalPlayerData[currentPlayer]);
+      }
+    }
   };
 
   let statVar;
@@ -226,8 +380,9 @@
       }); // corresponding value returned by the button
 
     for (let i = 1; i < 5; i++) {
-      const dropdownName = "#player-selector-" + i.toString();
-      d3.select(dropdownName)
+      // Create dropdown with players as options.
+      const dropdownId = "#player-selector-" + i.toString();
+      d3.select(dropdownId)
         .selectAll("myOptions")
         .data(availablePlayers)
         .enter()
@@ -237,7 +392,18 @@
         }) // text showed in the menu
         .attr("value", function (d) {
           return d;
-        }); // corresponding value returned by the button
+        }); // corresponding value returned by the buttons
+
+      // Fill initial player values.
+      d3.select(dropdownId).property("value", Object.keys(globalPlayerData)[i]);
+
+      // Add event listeners for changes.
+      d3.select(dropdownId).on("change", function (event, d) {
+        // recover the option that has been chosen
+        const selectedPlayer = d3.select(this).property("value");
+        const selectorIndex = this.id.slice(-1);
+        renderPlayerCard(selectorIndex, globalPlayerData[selectedPlayer]);
+      });
     }
   };
   statVar = "3P";
@@ -246,7 +412,7 @@
     // recover the option that has been chosen
     const selectedOption = d3.select(this).property("value");
     statVar = selectedOption;
-    // drawBar(centroid.features);
+    renderAllCards();
   });
 
   //
@@ -264,7 +430,7 @@
   var height = 400;
   svg = d3
     .select("#histogram")
-    .attr("width", width)
+    .attr("width", width + 50)
     .attr("height", height)
     .append("g")
     .attr("transform", "translate(" + 20 + "," + -20 + ")");
@@ -277,10 +443,9 @@
       data2.forEach((d) => {
         const key = d["Year"];
         const stats = { ...d };
-        delete stats["Year"];
+        // delete stats["Year"];
         champions[key] = stats;
       });
-      console.log(champions);
       drawHistogram();
     });
   });
@@ -290,19 +455,22 @@
     curData = threePointerStats.filter((d) => {
       // Pelicans and Hornets sometimes have empty values
       return (
-        d.Year.includes(String(globalTime)) && d["3PM"].trim().length !== 0
+        d.Year.includes(String(globalTime)) && d["3P%"].trim().length !== 0
       );
     });
     curData.sort((x, y) => {
-      return d3.ascending(y["3PM"], x["3PM"]);
+      return d3.ascending(y["3P%"], x["3P%"]);
     });
+    console.log(curData);
     x = curData.map((d) => d["Team"]);
-    y = curData.map((d) => d["3PM"]);
-    // console.log(x, y);
+    y = curData.map((d) => d["3P%"]);
 
     // // Scaling functions
     var x3 = d3.scaleBand().domain(x).range([0, width]).paddingInner(0.1);
-    var y3 = d3.scaleLinear().domain([0, 50]).range([height, 0]);
+    var y3 = d3
+      .scaleLinear()
+      .domain([0, 50])
+      .range([height - 50, 0]);
 
     svg.selectAll(".axis").remove();
 
@@ -310,7 +478,7 @@
     // svg
     //   .append("g")
     //   .attr("class", "x axis")
-    //   .attr("transform", "translate(0," + height3 + ")")
+    //   .attr("transform", "translate(0," + height + ")")
     //   .call(d3.axisBottom(x3).ticks(10))
     //   .selectAll("text")
     //   .style("text-anchor", "end")
@@ -318,25 +486,19 @@
     //   .attr("dy", ".15em")
     //   .attr("transform", "rotate(-55)");
 
+    // X-axis: Teams
     svg
       .append("text")
       .attr("class", "x axis label")
-      .attr("transform", "translate(" + width / 2 + " ," + (height + 20) + ")")
+      .attr("transform", "translate(" + width / 2 + " ," + height + ")")
       .style("text-anchor", "middle")
       .text("Teams");
-
-    // X-axis: Teams
-    svg
-      .append("g")
-      .attr("class", "x axis")
-      .attr("transform", "translate(" + 20 + " ," + -20 + ")")
-      .call(d3.axisBottom(x3));
 
     // Y-axis: 3P%
     svg
       .append("g")
       .attr("class", "y axis")
-      .attr("transform", "translate(" + 20 + " ," + -20 + ")")
+      .attr("transform", "translate(" + 20 + " ," + 30 + ")")
       .call(d3.axisLeft(y3));
 
     svg
@@ -366,14 +528,15 @@
             })
             .attr("width", x3.bandwidth())
             .attr("y", y3(0))
-            .attr("fill", "blue")
-            .transition(t)
-            .attr("y", (d) => {
-              //   console.log(d["3PM"]);
-              //   console.log(y3(d["3PM"]));
-              return y3(d["3PM"]);
+            .attr("fill", (d) => {
+              if (d["Team"] === champions[globalTime]["Champion"]) return "red";
+              else if (d["Team"] === champions[globalTime]["Runner-Up"])
+                return "orange";
+              else return "grey";
             })
-            .attr("height", (d) => height - y3(d["3PM"]))
+            .transition(t)
+            .attr("y", (d) => y3(d["3P%"]))
+            .attr("height", (d) => height - y3(d["3P%"]))
             .attr("transform", "translate(" + 20 + " ," + -20 + ")"),
         // UPDATE (elements to be updated)
         (update) =>
@@ -381,13 +544,14 @@
             .attr("fill", (d) => {
               if (d["Team"] === champions[globalTime]["Champion"]) return "red";
               else if (d["Team"] === champions[globalTime]["Runner-Up"])
-                return "blue";
+                return "orange";
+              else return "grey";
             })
             .transition(t)
             .attr("x", (d) => x3(d["Team"]))
             .attr("width", x3.bandwidth())
-            .attr("y", (d) => y3(d["3PM"]))
-            .attr("height", (d) => height - y3(d["3PM"]))
+            .attr("y", (d) => y3(d["3P%"]))
+            .attr("height", (d) => height - y3(d["3P%"]))
       );
   }
 </script>
