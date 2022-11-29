@@ -183,6 +183,10 @@
                 <img id="histogram-champions" src="" />
                 <div>Runner-Up</div>
                 <img id="histogram-runnerup" src="" />
+                <div>
+                    <svg id="h-legend" style="margin-top: 10vh;"></svg>
+                </div>
+                
             </div>
         </div>
         <div class="'pie-container">
@@ -874,11 +878,59 @@
         .append("g")
         .attr("transform", "translate(" + 20 + "," + -20 + ")");
 
+
+    hLegendSvg = d3
+        .select("#h-legend")
+        .attr("width", 200)
+        .attr("height", 100)
+        .append("g")
+        .attr("transform", "translate(" + -180 + "," + 0 + ")");
+
     var threePointerStats, champions, playoff_teams;
 
     async function loadData() {
         threePointerStats = await d3.csv("Book2.csv");
         await d3.csv("NBA-champions.csv").then((data2) => {
+            hLegendSvg
+            .append("circle")
+            .attr("cx", 200)
+            .attr("cy", 30)
+            .attr("r", 6)
+            .style("fill", "red");
+        hLegendSvg
+            .append("circle")
+            .attr("cx", 200) 
+            .attr("cy", 90)
+            .attr("r", 6)
+            .style("fill", "blue");
+            hLegendSvg
+            .append("circle")
+            .attr("cx", 200) 
+            .attr("cy", 60)
+            .attr("r", 6)
+            .style("fill", "orange");
+        hLegendSvg
+            .append("text")
+            .attr("x", 220)
+            .attr("y", 30)
+            .text("Champions")
+            .style("font-size", "15px")
+            .attr("alignment-baseline", "middle");
+        hLegendSvg
+            .append("text")
+            .attr("x", 220)
+            .attr("y", 60)
+            .text("Runner-ups")
+            .style("font-size", "15px")
+            .attr("alignment-baseline", "middle");
+        hLegendSvg
+            .append("text")
+            .attr("x", 220)
+            .attr("y", 90)
+            .text("Playoff Teams")
+            .style("font-size", "15px")
+            .attr("alignment-baseline", "middle");
+
             champions = data2;
             data2.forEach((d) => {
                 const key = d["Year"];
