@@ -174,7 +174,8 @@
 </body>
 
 <script>
-    let globalTime;
+  let globalTime;
+
 
     // Time Slider (starter code from: https://bl.ocks.org/johnwalley/e1d256b81e51da68f7feb632a53c3518).
     var dataTime = d3.range(0, 24).map(function (d) {
@@ -568,51 +569,63 @@
 
 
     }
-    //
-    //
-    //
-    //
-    //
-    //
-    //
-    //
-    //
-    //
-    //   Histogram
-    var width = 500;
-    var height = 400;
-    svg = d3
-        .select("#histogram")
-        .attr("width", width + 50)
-        .attr("height", height)
-        .append("g")
-        .attr("transform", "translate(" + 20 + "," + -20 + ")");
+    
+    
+      //
+  //
+  //
+  //
+  //
+  //
+  //
+  //
+  //
+  //
+  //   Histogram
+  var width = 500;
+  var height = 400;
+  svg = d3
+    .select("#histogram")
+    .attr("width", width + 50)
+    .attr("height", height)
+    .append("g")
+    .attr("transform", "translate(" + 20 + "," + -20 + ")");
 
-    var threePointerStats, champions;
-    d3.csv("Book2.csv").then((data) => {
-        threePointerStats = data;
-        d3.csv("NBA-champions.csv").then((data2) => {
-            champions = data2;
-            data2.forEach((d) => {
-                const key = d["Year"];
-                const stats = { ...d };
-                // delete stats["Year"];
-                champions[key] = stats;
-            });
-            drawHistogram();
-        });
+  var threePointerStats, champions, playoff_teams;
+
+  async function loadData() {
+    await d3.csv("Book2.csv").then((data) => {
+      threePointerStats = data;
+    });
+    await d3.csv("NBA-champions.csv").then((data2) => {
+      champions = data2;
+      data2.forEach((d) => {
+        const key = d["Year"];
+        const stats = { ...d };
+        // delete stats["Year"];
+        champions[key] = stats;
+      });
     });
 
-    function drawHistogram() {
-        // data based on globalTime
-        curData = threePointerStats.filter((d) => {
-            // Pelicans and Hornets sometimes have empty values
-            return (
-                d.Year.includes(String(globalTime)) && d["3P%"].trim().length !== 0
-            );
-        });
-        curData.sort((x, y) => {
-            return d3.ascending(y["3P%"], x["3P%"]);
+    await d3.csv("nba_playoffs.csv").then((data) => {
+      playoff_teams = data;
+    });
+
+    drawHistogram();
+  }
+  loadData();
+
+  function drawHistogram() {
+    // data based on globalTime
+    console.log("playoff teams", playoff_teams);
+    curData = threePointerStats.filter((d) => {
+      // Pelicans and Hornets sometimes have empty values
+      return (
+        d.Year.includes(String(globalTime)) && d["3P%"].trim().length !== 0
+      );
+    });
+    curData.sort((x, y) => {
+      return d3.ascending(y["3P%"], x["3P%"]);
         });
         x = curData.map((d) => d["Team"]);
         y = curData.map((d) => d["3P%"]);
