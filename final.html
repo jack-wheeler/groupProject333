@@ -6,7 +6,7 @@
         name="viewport"
         content="width=device-width, initial-scale=1, shrink-to-fit=no"
     />
-    <title>d3-simple-slider</title>
+    <title>NBA Visualization</title>
 
     <script src="https://d3js.org/d3.v7.min.js"></script>
     <script src="https://unpkg.com/d3-simple-slider"></script>
@@ -38,6 +38,10 @@
         .player-selection {
             display: flex;
             justify-content: center;
+        }
+
+        #continue-button, #start-button {
+            margin-bottom: 2vh;
         }
 
         .stat-selector-container {
@@ -96,15 +100,40 @@
             width: 80px;
             height: 40px;
             margin-left: 720px;
+            margin-bottom: 2vh;
         }
 
         #st-annotation {
             position: absolute;
-            top: 300px;
+            top: 580px;
             left: 450px;
             width: 250px;
             font-size: 12px;
         }
+
+        .histogram-and-pie {
+            display: flex;
+            flex-direction: row;
+            justify-content: space-between;
+            margin-top: 5vh;
+            margin-left: 5vw;
+            margin-right: 5vw;
+        }
+
+        #histogram-title {
+            text-align: center;
+        }
+
+        .histogram-container {
+            display: flex;
+            flex-direction: row;
+        }
+
+        .histogram-logos {
+            margin-top: 5vh;
+        }
+
+        .
 
         /* .player-selection {
             margin-left: auto;
@@ -114,6 +143,14 @@
 </head>
 
 <body>
+    <h1 style="margin-bottom:1vh; text-align:center;"> Stephen Curry </h1>
+    <h3 style="margin-top:1vh; margin-bottom: 2vh; text-align:center;"> And the History of the 3-Pointer in the NBA </h3>
+
+    <p style="margin-right: 20vw; margin-left: 20vw; margin-bottom:5vh; text-align:center;"> The 3-Pointer has quickly become the most important aspect of
+    scoring in the modern NBA, and at Stephen Curry is a huge part of why. Curry has completely revolutionized
+    the game with his accuracy and volume from behind the arc, and his impact on the NBA is visible through a
+    multitude of different metrics, highlighted in the visualizations below. </p>
+
     <div class="line-chart-container">
         <h2 style="text-align:center; margin-bottom: 5vh;"> The Evolution of Player's Three Point Shooting </h2>
         <div id="line-chart">
@@ -127,28 +164,39 @@
 
     <button id="st-continue-button">Next</button>
 
-    <p style="margin-top: 5vh; margin-left:20vw; margin-right: 20vw;"> This increase in 3 pointers is not limited to only a few special players. 
+    <hr>
+
+    <h2 style="margin-top:1vh; margin-bottom: 2vh; text-align:center;"> League-Wide Impacts </h3>
+
+    <p style="margin-top: 2vh; margin-left:20vw; margin-right: 20vw; text-align:center;"> This increase in 3 pointers is not limited to only a few special players. 
         All teams have gradually adapted their game in the last few years, with 3 
         pointers becoming increasingly more important to succeeding in the modern NBA. </p>
-
-    <div style="display: flex"></div>
-    <div>
-        <p id="histogram-title">3-Pointers Made by Each NBA Team</p>
-        <svg id="histogram"></svg>
-        <div>Champions</div>
-        <img id="histogram-champions" src="" />
-        <div>Runner-Up</div>
-        <img id="histogram-runnerup" src="" />
-    </div>
-
-    <div>
-        <p id="pie-title">Total Point Breakdown</p>
-        <div style="display: flex">
-            <svg id="pie"></svg>
-            <svg id="legend"></svg>
-            <!-- <svg id="bar"></svg> -->
+    
+    <div class="histogram-and-pie">
+        <div class="histogram-container">
+            <div class="histogram-and-title">
+                <h3 id="histogram-title">3-Pointers Made by Each NBA Team</h2>
+                <svg id="histogram"></svg>
+            </div>
+            <div class="histogram-logos">
+                <div>Champions</div>
+                <img id="histogram-champions" src="" />
+                <div>Runner-Up</div>
+                <img id="histogram-runnerup" src="" />
+            </div>
+        </div>
+        <div class="'pie-container">
+            <h3 id="pie-title">Total Point Breakdown</h2>
+            <div style="display: flex">
+                <svg id="pie"></svg>
+                <svg id="legend"></svg>
+                <!-- <svg id="bar"></svg> -->
+            </div>
         </div>
     </div>
+    
+
+    
     <div class="slider-outer-container">
         <div class="slider-inner-container">
             <div class="current-time-container">
@@ -161,16 +209,27 @@
     </div>
 
     <div class="annotations-container">
-        <p class="current-annotation">
-            Here is some data for each year since 1996.
+        <p class="current-annotation" style="text-align:center;">
+            In 1996, only 4 teams made more than 10 three pointers per game, and
+            three pointers were only about 20% of total scoring league-wide.
         </p>
     </div>
 
     <div class="button-container">
-        <button id="continue-button" disabled>Continue Animation</button>
+        <button id="start-button"> Start Animation </button>
+        <button id="continue-button" disabled style="display: none;">Continue Animation</button>
     </div>
 
-    <h2 style="text-align: center">Player Comparison</h2>
+    <hr>
+
+    <h2 style="text-align: center">Steph vs The Best</h2>
+
+    <p style="margin: 2vh 20vw; text-align:center;"> 
+        Lastly, we can compare Steph's individual numbers directly to some of the
+        all time great shooters. No matter what category we choose to analyze, it's clear that Curry
+        is truly in a league of his own.
+     </p>
+
     <div class="stat-selector-container">
         <p class="stat-selector-label">Current Statistic:</p>
         <select id="stat-selector" class="dropdown"></select>
@@ -336,7 +395,7 @@
                     )
                     .transition()
                     .duration(2000)
-                    .style("top", "260px")
+                    .style("top", "510px")
                     .style("left", "470px");
             } else if (stCount == 1) {
                 drawLine("richmond", 2.5);
@@ -346,7 +405,7 @@
                     )
                     .transition()
                     .duration(2000)
-                    .style("top", "200px")
+                    .style("top", "400px")
                     .style("left", "580px");
             } else if (stCount == 2) {
                 drawLine("allen", 2.5);
@@ -356,7 +415,7 @@
                     )
                     .transition()
                     .duration(2000)
-                    .style("top", "130px")
+                    .style("top", "350px")
                     .style("left", "700px");
             } else {
                 drawLine("curry", 5);
@@ -367,7 +426,7 @@
                     )
                     .transition()
                     .duration(2000)
-                    .style("top", "70px")
+                    .style("top", "280px")
                     .style("left", "710px");
             }
             stCount++;
@@ -407,20 +466,25 @@
     gTime.call(sliderTime);
 
     // Create an animation for the slider.
-    var firstSliderAnimation = setInterval(() => {
-        let currentTime = sliderTime.value();
 
-        if (currentTime == 2009) {
-            d3.select("#continue-button").attr("disabled", null);
-            clearInterval(firstSliderAnimation);
-            d3.select(".current-annotation").html(
-                "In 2009, Steph Curry changed everything."
-            );
-        } else {
-            sliderTime.value(currentTime + 1);
-            gTime.transition().duration(200).call(sliderTime);
-        }
-    }, 500);
+    d3.select("#start-button").on("click", (event, d) => {
+        d3.select("#start-button").style("display", "none");
+        d3.select("#continue-button").style("display", "block");
+        var firstSliderAnimation = setInterval(() => {
+            let currentTime = sliderTime.value();
+
+            if (currentTime == 2009) {
+                d3.select("#continue-button").attr("disabled", null);
+                clearInterval(firstSliderAnimation);
+                d3.select(".current-annotation").html(
+                    "In 2009, Steph Curry entered the league and changed everything."
+                );
+            } else {
+                sliderTime.value(currentTime + 1);
+                gTime.transition().duration(200).call(sliderTime);
+            }
+        }, 500);
+        });
 
     d3.select("p#current-time").text(sliderTime.value());
     d3.select("#continue-button").on("click", (event, d) => {
@@ -432,12 +496,17 @@
                 d3.select("#continue-button").attr("disabled", null);
                 clearInterval(thirdSliderAnimation);
                 d3.select(".current-annotation").html(
-                    "In 2014-15, Stephen Curry wins his first NBA championship, \n shooting 38.5% on 11 3PA/game"
+                    `<p> In 2014-15, Stephen Curry wins his first NBA championship, \n shooting 38.5% on 11 3PA/game. <p>
+                    <p> Notice that half of NBA teams are still below the 10 3PM per game mark, and threes are only 25% of total scoring.`
                 );
             }
 
             if (currentTime == d3.max(dataTime)) {
                 clearInterval(thirdSliderAnimation);
+                d3.select(".current-annotation").html(
+                    `<p> In just 5 years, not a single team is making less than 12 threes per game, and threes are now nearly 1/3 of all scoring. </p>
+                    <p> No matter if they make the playoffs or not, all teams have gotten the message. </p>`
+                );
             } else {
                 sliderTime.value(currentTime + 1);
                 gTime.transition().duration(200).call(sliderTime);
@@ -629,8 +698,8 @@
 
     legendSvg = d3
         .select("#legend")
-        .attr("width", 400)
-        .attr("height", 200)
+        .attr("width", 200)
+        .attr("height", 100)
         .append("g")
         .attr("transform", "translate(" + -180 + "," + 5 + ")");
 
@@ -651,26 +720,26 @@
         legendSvg
             .append("circle")
             .attr("cx", 200)
-            .attr("cy", 130)
+            .attr("cy", 30)
             .attr("r", 6)
             .style("fill", "red");
         legendSvg
             .append("circle")
             .attr("cx", 200) 
-            .attr("cy", 160)
+            .attr("cy", 60)
             .attr("r", 6)
             .style("fill", "blue");
         legendSvg
             .append("text")
             .attr("x", 220)
-            .attr("y", 130)
+            .attr("y", 30)
             .text("3P")
             .style("font-size", "15px")
             .attr("alignment-baseline", "middle");
         legendSvg
             .append("text")
             .attr("x", 220)
-            .attr("y", 160)
+            .attr("y", 60)
             .text("2P")
             .style("font-size", "15px")
             .attr("alignment-baseline", "middle");
@@ -916,8 +985,8 @@
                             ) {
                                 d3.select("#histogram-champions")
                                     .attr("src", `nba-team-logos/${d.Team}.png`)
-                                    .attr("width", 100)
-                                    .attr("height", 80);
+                                    .attr("height", "auto")
+                                    .attr("width", 50);
                                 return "red";
                             } else if (
                                 d["Team"] ===
@@ -925,8 +994,8 @@
                             ) {
                                 d3.select("#histogram-runnerup")
                                     .attr("src", `nba-team-logos/${d.Team}.png`)
-                                    .attr("width", 100)
-                                    .attr("height", 80);
+                                    .attr("height", "auto")
+                                    .attr("width", 50);
                                 return "orange";
                             } else if (cur_playoff_teams.has(d["Team"]))
                                 return "blue";
@@ -943,15 +1012,14 @@
                 (update) =>
                     update
                         .attr("fill", (d) => {
-                            console.log(d["Team"]);
                             if (
                                 d["Team"] ===
                                 champions[globalTime + 1]["Champion"]
                             ) {
                                 d3.select("#histogram-champions")
                                     .attr("src", `nba-team-logos/${d.Team}.png`)
-                                    .attr("width", 100)
-                                    .attr("height", 80);
+                                    .attr("height", "auto")
+                                    .attr("width", 50);
                                 return "red";
                             } else if (
                                 d["Team"] ===
@@ -959,8 +1027,8 @@
                             ) {
                                 d3.select("#histogram-runnerup")
                                     .attr("src", `nba-team-logos/${d.Team}.png`)
-                                    .attr("width", 100)
-                                    .attr("height", 80);
+                                    .attr("height", "auto")
+                                    .attr("width", 50);
                                 return "orange";
                             } else if (cur_playoff_teams.has(d["Team"]))
                                 return "blue";
