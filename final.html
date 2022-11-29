@@ -221,34 +221,50 @@
 
   // Create an animation for the slider.
   var firstSliderAnimation = setInterval(() => {
-    let currentTime = sliderTime.value();
+        let currentTime = sliderTime.value()
 
-    if (currentTime == 2009) {
-      d3.select("#continue-button").attr("disabled", null);
-      clearInterval(firstSliderAnimation);
-      d3.select(".current-annotation").html(
-        "In 2009, Steph Curry changed everything."
-      );
-    } else {
-      sliderTime.value(currentTime + 1);
-      gTime.transition().duration(200).call(sliderTime);
-    }
-  }, 500);
+        
 
-  d3.select("#current-time").text(sliderTime.value());
-  d3.select("#continue-button").on("click", (event, d) => {
-    d3.select("#continue-button").attr("disabled", true);
-    var secondSliderAnimation = setInterval(() => {
-      let currentTime = sliderTime.value();
-
-      if (currentTime == d3.max(dataTime)) {
-        clearInterval(secondSliderAnimation);
-      } else {
-        sliderTime.value(currentTime + 1);
-        gTime.transition().duration(200).call(sliderTime);
-      }
+        if (currentTime == 2009) {
+            d3.select('#continue-button').attr('disabled', null);
+            clearInterval(firstSliderAnimation)
+            d3.select('.current-annotation').html('In 2009, Steph Curry changed everything.')
+        }
+    
+        else {
+            sliderTime.value(currentTime + 1);
+            gTime
+                .transition()
+                .duration(200)
+                .call(sliderTime);
+        }
     }, 500);
-  });
+
+    
+    d3.select('p#current-time').text(sliderTime.value());
+    d3.select('#continue-button').on("click", (event, d) => {
+        d3.select('#continue-button').attr('disabled', true);
+        var thirdSliderAnimation = setInterval(() => {
+            let currentTime = sliderTime.value()
+
+            if (currentTime == 2014) {
+                d3.select('#continue-button').attr('disabled', null);
+                clearInterval(thirdSliderAnimation)
+                d3.select('.current-annotation').html('In 2015, Stephen Curry wins his first NBA championship, \n shooting 38.5% on 11 3PA/game')
+            }
+
+            if (currentTime == d3.max(dataTime)) {
+                clearInterval(thirdSliderAnimation)
+            }
+            else {
+                sliderTime.value(currentTime + 1);
+                gTime
+                    .transition()
+                    .duration(200)
+                    .call(sliderTime);
+            }
+        }, 500);
+    })
 
   // Player Selection Visualization
   const result = d3
