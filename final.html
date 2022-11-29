@@ -69,19 +69,53 @@
             text-align: center;
         }
 
-        .null-container {
-            width: 9vw;
-        }
+    .null-container {
+            margin-left: 18px;
+      width: 10vw;
+    }
 
-        .player-name,
-        .player-selector {
-            margin-top: 0;
-            margin-bottom: 0;
-        }
-    </style>
+    .player-name,
+    .player-selector {
+      margin-top: 0;
+      margin-bottom: 0;
+    }
+
+    #line-chart {
+        width:800px;
+        height:500px;
+        margin-left: 280px;
+    }
+
+    #st-continue-button {
+        width:80px;
+        height:40px;
+        margin-left: 720px;
+    }
+
+    #st-annotation {
+        position: absolute;
+        top: 240px;
+        left: 450px;
+        width: 250px;
+        font-size: 12px;
+    }
+
+    .player-selection {
+        border: 1px black solid;
+        margin-left: auto;
+        width:1250px;
+    }
+
+  </style>
 </head>
 
 <body>
+    <div id="line-chart">
+        <div id="st-annotation">Since three pointers were introduced in the NBA in 1980, the average three pointers per game keep gradually increasing.</div>
+    </div>
+
+    <button id="st-continue-button">Next</button>
+
     <div class="annotations-container">
         <p class="current-annotation">
             Here is some data for each year since 1996.
@@ -175,12 +209,122 @@
 
 <script>
   let globalTime;
-
+    let stData;
 
     // Time Slider (starter code from: https://bl.ocks.org/johnwalley/e1d256b81e51da68f7feb632a53c3518).
     var dataTime = d3.range(0, 24).map(function (d) {
         return 1996 + d;
     });
+
+
+//Line chart
+
+var svgSt = d3.select("#line-chart")
+        .append("svg")
+        .attr("width", 800)
+        .attr("height", 450)
+        .append("g")
+        .attr("transform",
+          "translate(110,10)");
+          var xSt = d3.scaleLinear()
+        .domain([1980,2022])
+        .range([0, 700]);
+    svgSt.append("g")
+        .attr("transform", "translate(0,400)")
+        .call(d3.axisBottom(xSt).ticks(10).tickFormat(d3.format("d")));
+
+
+    var ySt = d3.scaleLinear()
+        .domain([0, 5])
+        .range([400, 0]);
+    svgSt.append("g")
+        .call(d3.axisLeft(ySt));
+    
+    svgSt.append('text')
+    .attr("x", -100)
+    .attr("y", 200)
+    .attr("font-size", "10px")
+    .html('3pt per game');
+
+    var colorSt = d3.scaleOrdinal()
+        .domain(['average','bird', 'richmond', 'allen', 'curry'])
+        .range(['gray','green', 'purple', 'red', '#AE8625'])
+
+const transitionPath = d3
+    .transition()
+    .duration(2500);
+
+function drawLine(player, width){
+    path = svgSt.append("path")
+      .datum(stData[player])
+      .attr("fill", "none")
+      .attr("stroke", colorSt(player))
+      .attr("stroke-width", width)
+      .attr("d", d3.line()
+        .x(function(d) { return xSt(d.season) })
+        .y(function(d) { return ySt(d.value) })
+        )
+
+    pathLength = path.node().getTotalLength();
+    
+    path
+    .attr("stroke-dashoffset", pathLength)
+    .attr("stroke-dasharray", pathLength)
+    .transition()
+    .duration(2000)
+    .attr("stroke-dashoffset", 0);
+}
+
+d3.json("threeAverages.json").then(function(data) {
+    stData=data
+    stCount=0
+
+    drawLine('average', 1.5)
+
+    d3.select('#st-continue-button').on("click", (event, d) => {
+    
+    if (stCount == 0){
+        drawLine('bird', 2.5)
+        d3.select('#st-annotation')
+        .html('Larry Bird was the first to start masterizing the three pointers in the NBA in the 80s. The Celtics legend shooting skills helped him become NBA season MVP of 1983-1984 season.')
+        .transition()
+        .duration(2000)
+        .style("top", "220px")
+        .style("left", "470px");
+        
+    }
+    else if(stCount == 1){
+        drawLine('richmond', 2.5)
+        d3.select('#st-annotation')
+        .html('Mitch Richmond was one of the best 3pt shooters of the 90s. He was a six-time NBA All-Star player and his legendary number 2 shirt in the Sacramento Kings was retired.')
+        .transition()
+        .duration(2000)
+        .style("top", "120px")
+        .style("left", "580px");
+    }
+    else if(stCount == 2){
+        drawLine('allen', 2.5)
+        d3.select('#st-annotation')
+        .html('Considered one of the greatest shooters of all-time, Ray Allen held the record for most three-pointers made until 2021.')
+        .transition()
+        .duration(2000)
+        .style("top", "70px")
+        .style("left", "700px");
+    }else{
+        drawLine('curry', 5)
+        d3.select('#st-continue-button').attr('disabled', true);
+        d3.select('#st-annotation')
+        .html('However, the guy that makes even the best look like average players is Stephen Curry. <br><br> With the most three-pointers made in a carreer, Stephen is widely considered the greatest three pointer of all-time')
+        .transition()
+        .duration(2000)
+        .style("top", "30px")
+        .style("left", "710px");
+    }
+    stCount++;
+    })
+     });
+
+    //
 
     var sliderTime = d3
         .sliderBottom()
@@ -322,6 +466,11 @@
             <p class="league-average-stat"> ${leagueStat} </p>
             <p class="adjusted-stat"> ${adjusted}x </p>
         </div>
+        `
+      );
+    } else {
+      const imageURL = "player-images/" + playerData["Image URL"];
+      d3.select(playerCardSelector + " .player-image-container").html(
         `
             );
         } else {
@@ -626,6 +775,9 @@
     });
     curData.sort((x, y) => {
       return d3.ascending(y["3P%"], x["3P%"]);
+    });
+    x = curData.map((d) => d["Team"]);
+    y = curData.map((d) => d["3P%"]);
         });
         x = curData.map((d) => d["Team"]);
         y = curData.map((d) => d["3P%"]);
